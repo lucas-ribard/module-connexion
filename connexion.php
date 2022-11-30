@@ -59,7 +59,6 @@ function myFunction() {
              
                 session_start();
 
-                if(isset($_POST['login']) && isset($_POST['password'])){
                     // connexion
                     $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
 
@@ -72,7 +71,7 @@ function myFunction() {
 
                     //echo "criptage data<br>";   // / / /test/ / /
 
-                    if($username !== "" && $password !== ""){
+                    if(isset($username) AND isset($password) ){
                         $requete = "SELECT count(*) FROM `utilisateurs` where `login` = '$username' AND `password` = '$password' ";
 
                         //echo "requete formulé<br>"; // / / /test/ / /
@@ -91,20 +90,15 @@ function myFunction() {
                         
                         if($count!=0){ // nom d'utilisateur et mot de passe correctes
                             $_SESSION['login'] = $username; //
-                           // header('Location: module-connexion/profil.php'); //redirigé vers la page profil.php
-                            echo "WIN";
+                            header('Location:http://localhost/module-connexion/profil.php'); //redirigé vers la page profil.php
                         }
                         else{
-                            echo "<error>utilisateur ou mot de passe incorrect</error>";
+                            echo "<br><error>utilisateur ou mot de passe incorrect</error>";
                         }
                     }
                     else{
-                       echo "<error>utilisateur ou mot de passe vide</error>";
+                       echo "<br><error>utilisateur ou mot de passe vide</error>";
                     }
-                }
-                else{
-                    //
-                }
                     mysqli_close($mysqli); // fermer la connexion
                 ?>
 

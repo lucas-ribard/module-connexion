@@ -52,13 +52,12 @@ function myFunction() {
                 <br>
                 <input type="submit" value="envoyer"><br>
             </form>
+
+
             <?php 
-
-
-    
              
                 session_start();
-
+                    
                     // connexion
                     $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
 
@@ -69,11 +68,12 @@ function myFunction() {
                     $username = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['login'])); 
                     $password = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['password']));
 
-                    //echo "criptage data<br>";   // / / /test/ / /
-
+                    //echo "\'criptage\' data<br>";   // / / /test/ / /
+                    
                     if(isset($username) AND isset($password) ){
+                     
                         $requete = "SELECT count(*) FROM `utilisateurs` where `login` = '$username' AND `password` = '$password' ";
-
+                        
                         //echo "requete formulé<br>"; // / / /test/ / /
 
                         $exec_requete = mysqli_query($mysqli,$requete);
@@ -85,14 +85,14 @@ function myFunction() {
                         //echo "reponse = "; // / / /test/ / /
 
                         $count = $reponse['count(*)'];
-
+                        
                         //echo $count,"<br>"; // / / /test/ / /
                         
                         if($count!=0){ // nom d'utilisateur et mot de passe correctes
                             $_SESSION['login'] = $username; //
                             header('Location:http://localhost/module-connexion/profil.php'); //redirigé vers la page profil.php
                         }
-                        else{
+                        elseif($count==0){
                             echo "<br><error>utilisateur ou mot de passe incorrect</error>";
                         }
                     }

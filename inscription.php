@@ -72,7 +72,8 @@ function myFunction() {
                 $password1=$_POST["password1"];
                 $password2=$_POST["password2"];
     
-                /*verifie que les deux mots de passes sont identiques*/
+                /*on vérifie que les champs sont bien remplit
+                        et on verifie que les deux mots de passes sont identiques*/
                 if(isset($login) and isset($nom) and isset($prenom) and isset($password1)){
                     if($password1===$password2){
                         // connexion;

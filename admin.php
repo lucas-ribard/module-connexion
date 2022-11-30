@@ -1,14 +1,9 @@
 <?php
     // connexion
     $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
-
     // requete
     $request = $mysqli -> query("SELECT * FROM utilisateurs");    
-
-
-
 ?>
-
         <style>
         table,th,td {
             padding: 10px;

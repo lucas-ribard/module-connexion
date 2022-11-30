@@ -44,25 +44,25 @@ function myFunction() {
         <hr>
         <div id="box">
            
-            <form action="connexion.php" method="post">
+            <form action="" method="post">
                 <label for="login">Login :</label><br>
-                <input type="text"  id="login" size="30" required>  <br>
+                <input type="text"  name="login" placeholder="Entrer le nom d'utilisateur" size="30" required>  <br>
                 <br>
                 <label for="nom">Nom :</label><br>
-                <input type="text"  id="nom" size="30" required> <br>
+                <input type="text"  name="nom" placeholder="Entrer votre nom" size="30" required> <br>
                 <br>
                 <label for="prenom">Prenom :</label><br>
-                <input type="text"  id="prenom" size="30" required><br>  
+                <input type="text"  name="prenom" placeholder="Entrer votre prenom" size="30" required><br>  
                 <br>
                 <label for="password1">Mot de passe :</label><br>
-                <input type="password"  id="password1" size="30" required> <br> 
+                <input type="password"  name="password1" placeholder="Mot de passe" size="30" required> <br> 
                 <br>
                 <label for="password2">Répéter votre Mot de passe :</label><br>
-                <input type="password"  id="password2" size="30" required>  <br>
+                <input type="password"  name="password2" placeholder="Mot de passe" size="30" required>  <br>
                 <br>
                 <input type="checkbox" onclick="myFunction()">Afficher le mot de passe <br>
                 <br>
-                <input type="submit" value="envoyer"><br>
+                <input type="submit" value="s'inscrire"><br>
             </form>
             <?php 
                 //recup les valeurs du formulaire
@@ -71,21 +71,20 @@ function myFunction() {
                 $prenom=$_POST["prenom"];
                 $password1=$_POST["password1"];
                 $password2=$_POST["password2"];
-
+    
                 /*verifie que les deux mots de passes sont identiques*/
-                if(isset($login)and isset($nom) and isset($prenom) and isset($password1)){
+                if(isset($login) and isset($nom) and isset($prenom) and isset($password1)){
                     if($password1===$password2){
-                        // connexion
+                        // connexion;
                         $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
                         //la requete sql
                         $sql = "INSERT INTO `utilisateurs`(`login`, `prenom`, `nom`, `password`) VALUES ('$login','$nom','$prenom','$password1')";
-
                         //si requete réussit
                         if ($mysqli->query($sql) === TRUE) {
-                            //echo "\ \ \ test \ \ \  inscription réussit";
-
+                            header('Location:http://localhost/module-connexion/connexion.php'); //redirigé vers la page de connexion
+                        }
                         //si requete echoué
-                        } else {
+                        else {
                             echo "Erreur: " . $sql . "
                         " . $mysqli->error;
                         }

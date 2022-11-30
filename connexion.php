@@ -54,18 +54,60 @@ function myFunction() {
             </form>
             <?php 
 
-                //recup les valeurs du formulaire
-                $login=$_POST["login"];
-                $password=$_POST["password"];
 
-                // connexion
-                $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
-               
-                $result = $mysqli->query("SELECT id FROM utilisateurs WHERE `login` = '$login'");
-                var_dump($result);
-                $mysqli->close();
+    
+             
+                session_start();
 
+                if(isset($_POST['login']) && isset($_POST['password'])){
+                    // connexion
+                    $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
+
+                        /* on applique les deux fonctions mysqli_real_escape_string et htmlspecialchars
+                            pour éliminer toute attaque de type injection SQL et XSS
+                                source : https://www.codeurjava.com/2016/12/formulaire-de-login-avec-html-css-php-et-mysql.html  */
+
+                    $username = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['login'])); 
+                    $password = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['password']));
+
+                    //echo "criptage data<br>";   // / / /test/ / /
+
+                    if($username !== "" && $password !== ""){
+                        $requete = "SELECT count(*) FROM `utilisateurs` where `login` = '$username' AND `password` = '$password' ";
+
+                        //echo "requete formulé<br>"; // / / /test/ / /
+
+                        $exec_requete = mysqli_query($mysqli,$requete);
+
+                        //echo "exec requette<br>"; // / / /test/ / /
+
+                        $reponse = mysqli_fetch_array($exec_requete);
+
+                        //echo "reponse = "; // / / /test/ / /
+
+                        $count = $reponse['count(*)'];
+
+                        //echo $count,"<br>"; // / / /test/ / /
+                        
+                        if($count!=0){ // nom d'utilisateur et mot de passe correctes
+                            $_SESSION['login'] = $username; //
+                           // header('Location: module-connexion/profil.php'); //redirigé vers la page profil.php
+                            echo "WIN";
+                        }
+                        else{
+                            echo "<error>utilisateur ou mot de passe incorrect</error>";
+                        }
+                    }
+                    else{
+                       echo "<error>utilisateur ou mot de passe vide</error>";
+                    }
+                }
+                else{
+                    //
+                }
+                    mysqli_close($mysqli); // fermer la connexion
                 ?>
+
         </div>
     </div>
 

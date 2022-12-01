@@ -1,50 +1,48 @@
 <script>
-//fonction en javascript qui affiche le mot de passe si demandé (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
-function affichPass() {
-    var x = document.getElementById("password"); //! important pointe les mots de passe par id (si le mot de passe n'a pas d'id ca ne marchera pas)
-      //change l'input de 'texte' a  'password' et inversement
-    if (x.type === "password") {
-    x.type = "text";
-    } else {
-    x.type = "password";
-    }
-} 
+    //fonction en javascript qui affiche le mot de passe si demandé (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
+    function affichPass() {
+        var x = document.getElementById("password"); //! important pointe les mots de passe par id (si le mot de passe n'a pas d'id ca ne marchera pas)
+        //change l'input de 'texte' a  'password' et inversement
+        if (x.type === "password") {
+        x.type = "text";
+        } else {
+        x.type = "password";
+        }
+    } 
 </script>
             
 <?php 
+    //ouvre une session
+    session_start();
+    //on vide les variables session pour etre sur qu'il n'y ait pas de probleme
+    $_SESSION['login']=NULL;
+    $_SESSION['password']=NULL;
+    // connexion
+    $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
 
+    /* on applique les deux fonctions mysqli_real_escape_string et htmlspecialchars
+        pour éliminer toute attaque de type injection SQL et XSS
+            source : https://www.codeurjava.com/2016/12/formulaire-de-login-avec-html-css-php-et-mysql.html  */
+    $username = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['login'])); 
+    $password = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['password']));      
 
-//ouvre une session
-session_start();
-//on vide les variables session pour etre sur qu'il n'y ait pas de probleme
-$_SESSION['login']=NULL;
-$_SESSION['password']=NULL;
-// connexion
-$mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
+    if(!empty($username) AND !empty($password) ){   
+        //requete qui compte le nombre d'entré de la base de donnée ou le login et le mot de passe sont identique a celui rentré             
+        $requete = "SELECT count(*) FROM `utilisateurs` where `login` = '$username' AND `password` = '$password' ";
+        $exec_requete = mysqli_query($mysqli,$requete);
+        $reponse = mysqli_fetch_array($exec_requete);
+        $count = $reponse['count(*)'];
 
-/* on applique les deux fonctions mysqli_real_escape_string et htmlspecialchars
-    pour éliminer toute attaque de type injection SQL et XSS
-        source : https://www.codeurjava.com/2016/12/formulaire-de-login-avec-html-css-php-et-mysql.html  */
-$username = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['login'])); 
-$password = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['password']));      
-
-if(!empty($username) AND !empty($password) ){   
-    //requete qui compte le nombre d'entré de la base de donnée ou le login et le mot de passe sont identique a celui rentré             
-    $requete = "SELECT count(*) FROM `utilisateurs` where `login` = '$username' AND `password` = '$password' ";
-    $exec_requete = mysqli_query($mysqli,$requete);
-    $reponse = mysqli_fetch_array($exec_requete);
-    $count = $reponse['count(*)'];
-
-    if($count!=0){ // nom d'utilisateur et mot de passe correctes
-        $_SESSION['login'] = $username; //enregistre l'utilisateur dans la session
-        $_SESSION['password'] = $password; //enregistre le mot de passe dans la session
-        header('Location:http://localhost/module-connexion/profil.php'); //redirigé vers la page profil.php
+        if($count!=0){ // nom d'utilisateur et mot de passe correctes
+            $_SESSION['login'] = $username; //enregistre l'utilisateur dans la session
+            $_SESSION['password'] = $password; //enregistre le mot de passe dans la session
+            header('Location:http://localhost/module-connexion/profil.php'); //redirigé vers la page profil.php
+        }
+        else{
+            $message="<br><error>utilisateur ou mot de passe incorrect</error>";
+        }
     }
-    else{
-        $message="<br><error>utilisateur ou mot de passe incorrect</error>";
-    }
-}
-    mysqli_close($mysqli); // ferme la connexion
+        mysqli_close($mysqli); // ferme la connexion
 ?>
 
 <!DOCTYPE html>
@@ -87,11 +85,10 @@ if(!empty($username) AND !empty($password) ){
             </form>
 
             <?php 
-                    if (isset($message)){
-                        echo $message;  //affiche un message d'erreur si probleme
-                    }
-                    
-                ?>
+                if (isset($message)){
+                    echo $message;  //affiche un message d'erreur si probleme
+                }   
+            ?>
 
         </div>
     </div>

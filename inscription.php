@@ -1,86 +1,82 @@
 <script>
-//fonction en javascript qui affiche le mot de passe si demandé (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
-function affichPass() {
-    var x1 = document.getElementById("password1");  //! important pointe les mots de passe par id (si le mot de passe n'a pas d'id ca ne marchera pas)
-    var x2 = document.getElementById("password2");  //ne marche pas avec deux mots de passe qui ont la meme id (qu'un seul sera affiché  (d'apres mes test je connais pas trop javascript))
-    //change l'input de 'texte' a  'password' et inversement
-    if (x1.type === "password") {
-    x1.type = "text";
-    x2.type = "text";
-    } else {
-    x1.type = "password";
-    x2.type = "password";
-    }
-} 
+    //fonction en javascript qui affiche le mot de passe si demandé (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
+    function affichPass() {
+        var x1 = document.getElementById("password1");  //! important pointe les mots de passe par id (si le mot de passe n'a pas d'id ca ne marchera pas)
+        var x2 = document.getElementById("password2");  //ne marche pas avec deux mots de passe qui ont la meme id (qu'un seul sera affiché  (d'apres mes test je connais pas trop javascript))
+        //change l'input de 'texte' a  'password' et inversement
+        if (x1.type === "password") {
+        x1.type = "text";
+        x2.type = "text";
+        } else {
+        x1.type = "password";
+        x2.type = "password";
+        }
+    } 
 </script>
 
 
 <?php 
 
-//on ouvre et récupere les variables sessions
-session_start();
-$loginses=$_SESSION['login'];
-$passwordses=$_SESSION['password'];
-  
+    //on ouvre et récupere les variables sessions
+    session_start();
+    $loginses=$_SESSION['login'];
+    $passwordses=$_SESSION['password'];
 
-// connexion;
-$mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
-//recup les infos de la base de donné
-$sql = "SELECT * FROM `utilisateurs`";
-$query = $mysqli->query($sql);
-$users=$query->fetch_all();
+    // connexion;
+    $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
+    //recup les infos de la base de donné
+    $sql = "SELECT * FROM `utilisateurs`";
+    $query = $mysqli->query($sql);
+    $users=$query->fetch_all();
 
-//recup les valeurs du formulaire
-$login=$_POST["login"];
-$nom=$_POST["nom"];
-$prenom=$_POST["prenom"];
-$password1=$_POST["password1"];
-$password2=$_POST["password2"];
-    
-//on vérifie que les champs sont bien remplit 
-if(isset($login) and isset($nom) and isset($prenom) and isset($password1)){
-    //on verifie que les deux mots de passes sont identiques
-    if($password1===$password2){
+    //recup les valeurs du formulaire
+    $login=$_POST["login"];
+    $nom=$_POST["nom"];
+    $prenom=$_POST["prenom"];
+    $password1=$_POST["password1"];
+    $password2=$_POST["password2"];
         
-        $loginDispo=false;
-        //parcours les utilisateur pour verifier qu'il n'existe pas déja (merci Aurélie)
-        foreach($users as $user){
-            if($_POST['login'] == $user[1]){
-                $message="<br><error>Cet Utilisateur existe déja</error><br>"; //login existe deja
-                break;  //sort de la boucle (sinon il crée quand meme l'utilisateur)
-            }
-            else{
-                //si l'utilisateur n'existe pas 
-                $loginDispo = true;
-            }
-        }
-        //si l'user est dispo
-        if($loginDispo === true){
-
-            //la requete sql
-            $sql = "INSERT INTO `utilisateurs`(`login`, `prenom`, `nom`, `password`) VALUES ('$login','$nom','$prenom','$password1')"; //ajoute login nom prenom password dans db
-            if ($mysqli->query($sql) === TRUE) {//si requete réussit
-                header('Location:http://localhost/module-connexion/connexion.php'); //redirigé vers la page de connexion
-            }
-            //si requete echoué
-            else {
-                $message="Erreur de requete";
-            }
-        }
+    //on vérifie que les champs sont bien remplit 
+    if(isset($login) and isset($nom) and isset($prenom) and isset($password1)){
+        //on verifie que les deux mots de passes sont identiques
+        if($password1===$password2){
             
+            $loginDispo=false;
+            //parcours les utilisateur pour verifier qu'il n'existe pas déja (merci Aurélie)
+            foreach($users as $user){
+                if($_POST['login'] == $user[1]){
+                    $message="<br><error>Cet Utilisateur existe déja</error><br>"; //login existe deja
+                    break;  //sort de la boucle (sinon il crée quand meme l'utilisateur)
+                }
+                else{
+                    //si l'utilisateur n'existe pas 
+                    $loginDispo = true;
+                }
+            }
+            //si l'user est dispo
+            if($loginDispo === true){
+
+                //la requete sql
+                $sql = "INSERT INTO `utilisateurs`(`login`, `prenom`, `nom`, `password`) VALUES ('$login','$nom','$prenom','$password1')"; //ajoute login nom prenom password dans db
+                if ($mysqli->query($sql) === TRUE) {//si requete réussit
+                    header('Location:http://localhost/module-connexion/connexion.php'); //redirigé vers la page de connexion
+                }
+                //si requete echoué
+                else {
+                    $message="Erreur de requete";
+                }
+            }
+                
+            
+        }
+        else{//les deux mots de passe ne sont pas identiques
+            $message="<br><error>Les deux Mots De Passes ne sont pas identiques</error><br>";
+        }
         
     }
-    else{//les deux mots de passe ne sont pas identiques
-        $message="<br><error>Les deux Mots De Passes ne sont pas identiques</error><br>";
-    }
-    
-}
-//ferme la connection
-$mysqli->close();
-
+    //ferme la connection
+    $mysqli->close();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="fr">

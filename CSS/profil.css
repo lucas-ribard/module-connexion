@@ -1,0 +1,12 @@
+body{
+    margin:0px;
+    background-image:url('https://images.nightcafe.studio/jobs/01yjjcmXGi4NEboS4emy/01yjjcmXGi4NEboS4emy_2x.jpg?tr=w-1600,c-at_max');
+    background-size: cover;
+    background-attachment: fixed;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+#box{
+    padding: 5% 25% 15%;
+}

@@ -14,7 +14,12 @@
 </head>
 
 <body>
-
+    <?php
+    session_start();
+    $login=$_SESSION['login'];
+    $password=$_SESSION['password'];
+    if ($login==="admin" and $password==="admin"){
+        ?>
     <table>
         <thead>
             <tr>
@@ -38,5 +43,8 @@
                 }
             ?>
     </table>
+    <?php
+}
+?>
 </body>
 </html>

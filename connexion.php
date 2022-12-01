@@ -1,3 +1,46 @@
+<script>
+//fonction en javascript (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
+function affichPass() {
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+    x.type = "text";
+    } else {
+    x.type = "password";
+    }
+} 
+</script>
+            
+<?php 
+//ouvre une session
+session_start();
+// connexion
+$mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
+
+/* on applique les deux fonctions mysqli_real_escape_string et htmlspecialchars
+    pour éliminer toute attaque de type injection SQL et XSS
+        source : https://www.codeurjava.com/2016/12/formulaire-de-login-avec-html-css-php-et-mysql.html  */
+$username = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['login'])); 
+$password = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['password']));      
+
+if(!empty($username) AND !empty($password) ){   
+    //requete qui compte le nombre d'entré de la base de donnée ou le login et le mot de passe sont identique a celui rentré             
+    $requete = "SELECT count(*) FROM `utilisateurs` where `login` = '$username' AND `password` = '$password' ";
+    $exec_requete = mysqli_query($mysqli,$requete);
+    $reponse = mysqli_fetch_array($exec_requete);
+    $count = $reponse['count(*)'];
+
+    if($count!=0){ // nom d'utilisateur et mot de passe correctes
+        $_SESSION['login'] = $username; //enregistre l'utilisateur dans la session
+        $_SESSION['password'] = $password; //enregistre le mot de passe dans la session
+        header('Location:http://localhost/module-connexion/profil.php'); //redirigé vers la page profil.php
+    }
+    else{
+        $message="<br><error>utilisateur ou mot de passe incorrect</error>";
+    }
+}
+    mysqli_close($mysqli); // fermer la connexion
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <meta charset="utf-8">
@@ -10,22 +53,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
  
 </head>
-
-
-<script>
-//fonction en javascript (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
-function myFunction() {
-    var x1 = document.getElementById("password");
-    if (x1.type === "password") {
-    x1.type = "text";
-    } else {
-    x1.type = "password";
-    }
-} 
-</script>
-
-
-
 
 <body>
   <!-- menu nav -->
@@ -48,58 +75,16 @@ function myFunction() {
                 <label for="password2">Répéter votre Mot de passe :</label><br>
                 <input type="password" name="password" id="password" size="30" required>  <br>
                 <br>
-                <input type="checkbox" onclick="myFunction()">Afficher le mot de passe <br>
+                <input type="checkbox" onclick="affichPass()">Afficher le mot de passe <br>
                 <br>
                 <input type="submit" value="envoyer"><br>
             </form>
 
-
             <?php 
-             
-                session_start();
-                    
-                    // connexion
-                    $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
-
-                        /* on applique les deux fonctions mysqli_real_escape_string et htmlspecialchars
-                            pour éliminer toute attaque de type injection SQL et XSS
-                                source : https://www.codeurjava.com/2016/12/formulaire-de-login-avec-html-css-php-et-mysql.html  */
-
-                    $username = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['login'])); 
-                    $password = mysqli_real_escape_string($mysqli,htmlspecialchars($_POST['password']));
-
-                    //echo "\'criptage\' data<br>";   // / / /test/ / /
-                    
-                    if(isset($username) AND isset($password) ){
-                     
-                        $requete = "SELECT count(*) FROM `utilisateurs` where `login` = '$username' AND `password` = '$password' ";
-                        
-                        //echo "requete formulé<br>"; // / / /test/ / /
-
-                        $exec_requete = mysqli_query($mysqli,$requete);
-
-                        //echo "exec requette<br>"; // / / /test/ / /
-
-                        $reponse = mysqli_fetch_array($exec_requete);
-
-                        //echo "reponse = "; // / / /test/ / /
-
-                        $count = $reponse['count(*)'];
-                        
-                        //echo $count,"<br>"; // / / /test/ / /
-                        
-                        if($count!=0){ // nom d'utilisateur et mot de passe correctes
-                            $_SESSION['login'] = $username; //
-                            header('Location:http://localhost/module-connexion/profil.php'); //redirigé vers la page profil.php
-                        }
-                        elseif($count==0){
-                            echo "<br><error>utilisateur ou mot de passe incorrect</error>";
-                        }
+                    if (isset($message)){
+                        echo $message;
                     }
-                    else{
-                       echo "<br><error>utilisateur ou mot de passe vide</error>";
-                    }
-                    mysqli_close($mysqli); // fermer la connexion
+                    
                 ?>
 
         </div>

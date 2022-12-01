@@ -1,7 +1,8 @@
 <script>
-//fonction en javascript (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
+//fonction en javascript qui affiche le mot de passe si demandé (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
 function affichPass() {
-    var x = document.getElementById("password");
+    var x = document.getElementById("password"); //! important pointe les mots de passe par id (si le mot de passe n'a pas d'id ca ne marchera pas)
+      //change l'input de 'texte' a  'password' et inversement
     if (x.type === "password") {
     x.type = "text";
     } else {
@@ -38,7 +39,7 @@ if(!empty($username) AND !empty($password) ){
         $message="<br><error>utilisateur ou mot de passe incorrect</error>";
     }
 }
-    mysqli_close($mysqli); // fermer la connexion
+    mysqli_close($mysqli); // ferme la connexion
 ?>
 
 <!DOCTYPE html>
@@ -67,7 +68,7 @@ if(!empty($username) AND !empty($password) ){
         <h1>Se Connecter</h1><br>
         <hr>
         <div id="box">
-            <!-- ajouter la redirection apres que l'inscription soit finie -->
+            <!-- formulaire -->
             <form action="" method="post">
                 <label for="login">Login :</label><br>
                 <input type="text" name="login" id="login" size="30" required>  <br>
@@ -82,7 +83,7 @@ if(!empty($username) AND !empty($password) ){
 
             <?php 
                     if (isset($message)){
-                        echo $message;
+                        echo $message;  //affiche un message d'erreur si probleme
                     }
                     
                 ?>

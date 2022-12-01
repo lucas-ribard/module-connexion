@@ -100,17 +100,19 @@ $mysqli->close();
   <ul id="nav">
         <li><a href="/module-connexion/index.php">Home</a></li>
         <li><a class="active" href="/module-connexion/inscription.php">S'inscrire</a></li>
-        <?php
+       <!-- cette partie de menu nav change si l'utilisateur est connecté-->
+        <?php 
         //si l'utilisateur est connecté
-        if (!empty($loginses) ){
-            echo "<li><a href=",'/module-connexion/profil.php',">Bienvenue ",$loginses,"</a></li>"; //affiche bienvenu $Utilisateur
+        if (!empty($login) ){
+            echo "<li><a href=",'/module-connexion/profil.php',">Bienvenue ",$login,"</a></li>"; //affiche bienvenu $Utilisateur
             echo "<li><a href=",'/module-connexion/connexion.php',">Se déconnecter</a></li>";      //affiche se déconnecter (envoie a la page de login car il déco automatiquement)
-        } 
-        //si l'utilisateur n'est pas connecté
-        else{
-            echo "<li><a href=",'/module-connexion/connexion.php',">Se Connecter</a></li>";//affiche se conecter
+            } 
+            //si l'utilisateur n'est pas connecté
+            else{
+                echo "<li><a href=",'/module-connexion/connexion.php',">Se Connecter</a></li>";//affiche se conecter
             }
         ?>
+        <!--  fin menu nav -->
     </ul>
 <section id="main">
     <div id="form"> 
@@ -152,10 +154,6 @@ $mysqli->close();
 
 </section>    
 </body>
-
-
-
-
 </html>
 
 

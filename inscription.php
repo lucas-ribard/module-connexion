@@ -2,7 +2,7 @@
 //fonction en javascript qui affiche le mot de passe si demandé (https://www.w3schools.com/howto/howto_js_toggle_password.asp)
 function affichPass() {
     var x1 = document.getElementById("password1");  //! important pointe les mots de passe par id (si le mot de passe n'a pas d'id ca ne marchera pas)
-    var x2 = document.getElementById("password2");  //ne marche pas avec deux mots de passe qui ont la meme id (qu'un seul sera affiché(d'apres mes test je connais pas trop javascript))
+    var x2 = document.getElementById("password2");  //ne marche pas avec deux mots de passe qui ont la meme id (qu'un seul sera affiché  (d'apres mes test je connais pas trop javascript))
     //change l'input de 'texte' a  'password' et inversement
     if (x1.type === "password") {
     x1.type = "text";
@@ -37,7 +37,7 @@ if(isset($login) and isset($nom) and isset($prenom) and isset($password1)){
     if($password1===$password2){
         
         $loginDispo=false;
-        //parcours les utilisateur pour verifier qu'il n'existe pas déja 
+        //parcours les utilisateur pour verifier qu'il n'existe pas déja (merci Aurélie)
         foreach($users as $user){
             if($_POST['login'] == $user[1]){
                 $message="<br><error>Cet Utilisateur existe déja</error><br>"; //login existe deja

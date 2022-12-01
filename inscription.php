@@ -17,6 +17,12 @@ function affichPass() {
 
 <?php 
 
+//on ouvre et récupere les variables sessions
+session_start();
+$loginses=$_SESSION['login'];
+$passwordses=$_SESSION['password'];
+  
+
 // connexion;
 $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
 //recup les infos de la base de donné
@@ -94,7 +100,17 @@ $mysqli->close();
   <ul id="nav">
         <li><a href="/module-connexion/index.php">Home</a></li>
         <li><a class="active" href="/module-connexion/inscription.php">S'inscrire</a></li>
-        <li><a href="/module-connexion/connexion.php">Se Connecter</a></li>
+        <?php
+        //si l'utilisateur est connecté
+        if (!empty($loginses) ){
+            echo "<li><a href=",'/module-connexion/profil.php',">Bienvenue ",$loginses,"</a></li>"; //affiche bienvenu $Utilisateur
+            echo "<li><a href=",'/module-connexion/connexion.php',">Se déconnecter</a></li>";      //affiche se déconnecter (envoie a la page de login car il déco automatiquement)
+        } 
+        //si l'utilisateur n'est pas connecté
+        else{
+            echo "<li><a href=",'/module-connexion/connexion.php',">Se Connecter</a></li>";//affiche se conecter
+            }
+        ?>
     </ul>
 <section id="main">
     <div id="form"> 

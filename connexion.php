@@ -12,8 +12,13 @@ function affichPass() {
 </script>
             
 <?php 
+
+
 //ouvre une session
 session_start();
+//on vide les variables session pour etre sur qu'il n'y ait pas de probleme
+$_SESSION['login']=NULL;
+$_SESSION['password']=NULL;
 // connexion
 $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
 
@@ -73,7 +78,7 @@ if(!empty($username) AND !empty($password) ){
                 <label for="login">Login :</label><br>
                 <input type="text" name="login" id="login" size="30" required>  <br>
                 <br>
-                <label for="password2">Répéter votre Mot de passe :</label><br>
+                <label for="password2">Mot de passe :</label><br>
                 <input type="password" name="password" id="password" size="30" required>  <br>
                 <br>
                 <input type="checkbox" onclick="affichPass()">Afficher le mot de passe <br>

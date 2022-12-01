@@ -1,3 +1,11 @@
+<?php
+   //on ouvre et récupere les variables sessions
+   session_start();
+   $login=$_SESSION['login'];
+   $password=$_SESSION['password'];
+  
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <meta charset="utf-8">
@@ -23,7 +31,17 @@
     <ul id="nav">
         <li><a class="active"href="/module-connexion/index.php">Home</a></li>
         <li><a href="/module-connexion/inscription.php">S'inscrire</a></li>
-        <li><a href="/module-connexion/connexion.php">Se Connecter</a></li>
+        <?php 
+        //si l'utilisateur est connecté
+        if (!empty($login) ){
+            echo "<li><a href=",'/module-connexion/profil.php',">Bienvenue ",$login,"</a></li>"; //affiche bienvenu $Utilisateur
+            echo "<li><a href=",'/module-connexion/connexion.php',">Se déconnecter</a></li>";      //affiche se déconnecter (envoie a la page de login car il déco automatiquement)
+        } 
+        //si l'utilisateur n'est pas connecté
+        else{
+            echo "<li><a href=",'/module-connexion/connexion.php',">Se Connecter</a></li>";//affiche se conecter
+        }
+        ?>
     </ul>
     
     

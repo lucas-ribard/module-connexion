@@ -12,10 +12,12 @@ body{
 }
 
 #box{
+    
     padding: 5% 25% 10%;
 }
 
 #form{
+    border-radius: 50px;
     width: 30%;
     background-color: white;
 }

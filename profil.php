@@ -17,23 +17,66 @@
 <?php
     //on ouvre et récupere les variables sessions
     session_start();
-    $login=$_SESSION['login'];
-    $password=$_SESSION['password'];
+    $loginSession=$_SESSION['login'];
+    $passwordSession=$_SESSION['password'];
 
     //verifie qu'un utilisateur est bien connecté
-    if(isset($login) AND isset($password) ){
+    if(isset($loginSession) AND isset($passwordSession) ){
         
-        if($login==="admin" and $password==="admin"){   //si admin
+        if($loginSession==="admin" and $passwordSession==="admin"){   //si admin
             header('Location:http://localhost/module-connexion/admin.php'); //redirigé vers la page admin
         }
 
         // connexion
         $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
-        $request = $mysqli -> query("SELECT * FROM `utilisateurs` where `login` = '$login' AND `password` = '$password'"); // recupere les infos de l'utilisateur
+        $request = $mysqli -> query("SELECT * FROM `utilisateurs` where `login` = '$loginSession' AND `password` = '$passwordSession'"); // recupere les infos de l'utilisateur
         $result = $request -> fetch_array() ;//recupere les infos dans l'array result
-            
-        
+
+
+        if (isset($_POST['ValidChange'])) {//si on appuie sur le bouton
+            //recupere tout les users
+            $sql = "SELECT * FROM `utilisateurs`";
+            $query = $mysqli->query($sql);
+            $users=$query->fetch_all();
+           
+            //recup les valeurs du formulaire
+            $login=$_POST["login"];
+            $nom=$_POST["nom"];
+            $prenom=$_POST["prenom"];
+            $password1=$_POST["password1"];
+            $password2=$_POST["password2"];
+            //récup l'id de la session
+            $id=$result['id'];
+
+            if($password1===$password2 and $password1===$result['password']){   //verif que les mots de passe est correct
+
+                $loginDispo=false;
+                //parcours les utilisateur pour verifier qu'il n'existe pas déja (merci Aurélie)
+                foreach($users as $user){
+                    if($_POST['login'] == $user[1]){
+                        $message="<br><error>Cet Utilisateur existe déja</error><br>"; //login existe deja
+                        break;  //sort de la boucle (sinon il crée quand meme l'utilisateur)
+                    }
+                    else{
+                        //si l'utilisateur n'existe pas 
+                        $loginDispo = true;
+                    }
+                }
+                //si l'user est dispo
+                if($loginDispo === true){
+                    //écrit dans la base de donné (id )les valeurs du form
+                    $requestChange = $mysqli -> query(" UPDATE `utilisateurs` SET `login`='$login',`prenom`='$prenom',`nom`='$nom' WHERE id = '$id' "); // recupere les infos de l'utilisateur
+                    $_SESSION['login'] = $username; //enregistre le nouvel utilisateur dans la session
+                    $_SESSION['password'] = $password; //enregistre le nouveau mot de passe dans la session
+                }
+            }
+            else {
+                $message="<br><error>Mots de passe incorrect</error><br>";
+            }
+
+        }
     }
+    
     //si l'utilisateur n'est pas connecté
     else{
         header('Location:http://localhost/module-connexion/connexion.php'); //redirigé vers la page connexion.php
@@ -62,8 +105,8 @@
 <!-- cette partie de menu nav change si l'utilisateur est connecté-->
 <?php 
  //si l'utilisateur est connecté
- if (!empty($login) ){
-    echo "<li><a href=",'/module-connexion/profil.php',">Bienvenue ",$login,"</a></li>"; //affiche bienvenu $Utilisateur
+ if (!empty($loginSession) ){
+    echo "<li><a href=",'/module-connexion/profil.php',">Bienvenue ",$loginSession,"</a></li>"; //affiche bienvenu $Utilisateur
     echo "<li><a href=",'/module-connexion/connexion.php',">Se déconnecter</a></li>";      //affiche se déconnecter (envoie a la page de login car il déco automatiquement)
     } 
     //si l'utilisateur n'est pas connecté
@@ -94,8 +137,13 @@
                 <br>
                 <input type="checkbox" onclick="affichPass()">Afficher le mot de passe <br>
                 <br>
-                <input type="submit" value="Valider les changements"><br>
+                <input type="submit" name="ValidChange" value="Valider les changements"><br>
             </form>
+            <?php 
+                if (isset($message)){
+                    echo $message;  //affiche un message d'erreur si probleme
+                }   
+            ?>
         </div>
     </div>
 

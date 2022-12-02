@@ -110,3 +110,14 @@ li a:hover:not(.active) {
     background-color: #ffffff;
     color:black;
 }
+
+#cv{
+    fill: rgb(255, 255, 255);
+    fill-rule: nonzero;
+    stroke: none;
+    stroke-width: 1;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+    stroke-miterlimit: 10;
+    stroke-dashoffset: 0;
+}

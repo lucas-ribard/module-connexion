@@ -33,29 +33,33 @@
         <li><a href="/module-connexion/connexion.php">Se Déconnecter</a></li>
     </ul>
    <br><br><br>
-    <table>
-        <thead>
-            <tr>
-                <td><strong>login</strong></td>
-                <td><strong>prenom</strong></td>
-                <td><strong>nom</strong></td>
-                <td><strong>password</strong></td>
-            
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-                while(($result = $request -> fetch_array()) != null)
-                {
-                    echo "<tr>";
-                    echo "<td>".$result['login']."</td>";
-                    echo "<td>".$result['prenom']."</td>";
-                    echo "<td>".$result['nom']."</td>";
-                    echo "<td>".$result['password']."</td>";
-                    echo "</tr>";
-                }
-            ?>
-    </table>
+   <section id="main">
+    <div id="box">
+        <table>
+            <thead>
+                <tr>
+                    <td><strong>login</strong></td>
+                    <td><strong>prenom</strong></td>
+                    <td><strong>nom</strong></td>
+                    <td><strong>password</strong></td>
+                
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    while(($result = $request -> fetch_array()) != null)
+                    {
+                        echo "<tr>";
+                        echo "<td>".$result['login']."</td>";
+                        echo "<td>".$result['prenom']."</td>";
+                        echo "<td>".$result['nom']."</td>";
+                        echo "<td>".$result['password']."</td>";
+                        echo "</tr>";
+                    }
+                ?>
+        </table>
+        </div>
+    </section>
     <?php
 }
 else{

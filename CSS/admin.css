@@ -1,6 +1,24 @@
 body{
     margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: whitesmoke;
 }
+
+#main{
+    padding: 0% 30%;
+}
+
+#box{
+    border-radius: 20px;
+    background-color: white;
+    padding:5%;
+    display:flex;
+    justify-content: center;
+}
+strong{
+    font-weight: bolder;
+}
+
 table,th,td {
     padding: 10px;
     border: 2px solid black;

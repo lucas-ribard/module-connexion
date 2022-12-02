@@ -19,8 +19,8 @@
 
     //on ouvre et récupere les variables sessions
     session_start();
-    $loginses=$_SESSION['login'];
-    $passwordses=$_SESSION['password'];
+    $loginSession=$_SESSION['login'];
+    $passwordSession=$_SESSION['password'];
 
     // connexion;
     $mysqli = new mysqli('localhost', 'root', '', 'moduleconnexion');
@@ -99,8 +99,8 @@
        <!-- cette partie de menu nav change si l'utilisateur est connecté-->
         <?php 
         //si l'utilisateur est connecté
-        if (!empty($login) ){
-            echo "<li><a href=",'/module-connexion/profil.php',">Bienvenue ",$login,"</a></li>"; //affiche bienvenu $Utilisateur
+        if (!empty($loginSession) ){
+            echo "<li><a href=",'/module-connexion/profil.php',">Bienvenue ",$loginSession,"</a></li>"; //affiche bienvenu $Utilisateur
             echo "<li><a href=",'/module-connexion/connexion.php',">Se déconnecter</a></li>";      //affiche se déconnecter (envoie a la page de login car il déco automatiquement)
             } 
             //si l'utilisateur n'est pas connecté

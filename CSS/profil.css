@@ -54,3 +54,8 @@ li a:hover:not(.active) {
     background-color: #ffffff;
     color:black;
 }
+
+error{
+    color:red;
+    font-weight: bold;
+}

@@ -68,6 +68,8 @@
                     $requestChange = $mysqli -> query(" UPDATE `utilisateurs` SET `login`='$login',`prenom`='$prenom',`nom`='$nom' WHERE id = '$id' "); // recupere les infos de l'utilisateur
                     $_SESSION['login'] = $username; //enregistre le nouvel utilisateur dans la session
                     $_SESSION['password'] = $password; //enregistre le nouveau mot de passe dans la session
+                    $loginSession=$_SESSION['login'];
+                    $passwordSession=$_SESSION['password'];
                 }
             }
             else {
